@@ -123,10 +123,21 @@ const deleteDevice = async (req, res) => {
     const device = await Device.findOneAndDelete({
       _id: req.params.id,
     });
+
     if (device) {
-      res.status(200).json({ msg: "Successfully deleted!" });
+      const locationName = device.locationName;
+
+      // Find the location by name
+      const location = await Location.findOne({ name: locationName });
+      if (location) {
+        // Remove the device ID from the location's devices array
+        location.devices.pull(device._id);
+        await location.save();
+      }
+
+      res.status(200).json({ message: "Successfully deleted!" });
     } else {
-      res.status(404).json({ msg: "Device not found!" });
+      res.status(404).json({ message: "Device not found!" });
     }
   } catch (error) {
     res.status(400).json({ error: error });
