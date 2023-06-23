@@ -39,7 +39,6 @@ const createDevice = async (req, res) => {
     } else {
       // Find the location by name
       const location = await Location.findOne({ name: locationName });
-      console.log(location);
 
       if (location) {
         const device = await Device.create({
@@ -67,19 +66,55 @@ const createDevice = async (req, res) => {
 const updateDevice = async (req, res) => {
   const { _id, serialNumber, type, status, locationName } = req.body;
 
+  console.log({ _id, serialNumber, type, status, locationName });
+
   try {
-    const result = await Device.findOneAndUpdate(
-      { _id: _id },
-      {
-        serialNumber,
-        type,
-        status,
-        locationName,
+    // Validate the device type and status
+    if (
+      !["pos", "kiosk", "signage"].includes(type) ||
+      !["active", "inactive"].includes(status)
+    ) {
+      return res.status(400).json({ error: "Invalid device type or status" });
+    }
+
+    const device = await Device.findById(_id);
+    if (!device) {
+      return res.status(404).json({ error: "Device not found" });
+    }
+
+    const previousLocationName = device.locationName;
+
+    // Find the new location by name
+    const newLocation = await Location.findOne({ name: locationName });
+    if (!newLocation) {
+      return res.status(404).json({ error: "Location not found" });
+    }
+
+    // Remove the device ID from the previous location's devices array
+    if (previousLocationName) {
+      const previousLocation = await Location.findOne({
+        name: previousLocationName,
+      });
+      if (previousLocation) {
+        previousLocation.devices.pull(device._id);
+        await previousLocation.save();
       }
-    );
-    res.status(200).json({ msg: "Device updated", Device: result });
+    }
+
+    // Update the device with the new information
+    device.serialNumber = serialNumber;
+    device.type = type;
+    device.status = status;
+    device.locationName = locationName;
+    await device.save();
+
+    // Add the device ID to the new location's devices array
+    newLocation.devices.push(device._id);
+    await newLocation.save();
+
+    res.status(200).json({ message: "Device updated", device: device });
   } catch (error) {
-    res.status(400).json({ error: error });
+    res.status(400).json({ error: error.message });
   }
 };
 
