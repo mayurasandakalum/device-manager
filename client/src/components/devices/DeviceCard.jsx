@@ -115,6 +115,7 @@ const DeviceCard = ({ data, onDelete }) => {
             }
             sx={{
               px: "5px",
+              fontWeight: "bold",
               bgcolor:
                 data.status === "active"
                   ? "rgba(0, 178, 93, 0.3)"
