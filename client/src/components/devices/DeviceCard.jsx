@@ -37,7 +37,7 @@ const DataRow = ({ title, data }) => {
   );
 };
 
-const DeviceCard = ({ data }) => {
+const DeviceCard = ({ data, onDelete }) => {
   let machineType;
 
   if (data.type === "pos") {
@@ -76,7 +76,7 @@ const DeviceCard = ({ data }) => {
           </Typography>
         </Grid>
         <Grid container item sm={8} justifyContent="end">
-          <MoreButton deviceID={data._id} />
+          <MoreButton deviceID={data._id} onDelete={onDelete} />
         </Grid>
         <Grid
           container

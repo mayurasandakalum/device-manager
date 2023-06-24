@@ -9,6 +9,12 @@ import DeviceCard from "../components/devices/DeviceCard";
 const Devices = () => {
   const [devices, setDevices] = useState(null);
 
+  const handleDelete = (deviceId) => {
+    setDevices((prevDevices) =>
+      prevDevices.filter((device) => device._id !== deviceId)
+    );
+  };
+
   useEffect(() => {
     axios
       .get(`${BASE_API_URL}/devices`)
@@ -34,7 +40,14 @@ const Devices = () => {
             rowSpacing={3}
             sx={{ mt: "20px" }}
           >
-            {devices && devices.map((device) => <DeviceCard data={device} />)}
+            {devices &&
+              devices.map((device) => (
+                <DeviceCard
+                  key={device._id}
+                  data={device}
+                  onDelete={handleDelete}
+                />
+              ))}
           </Grid>
         </Grid>
       </Grid>

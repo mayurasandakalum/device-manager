@@ -54,7 +54,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-const MoreButton = ({ deviceID }) => {
+const MoreButton = ({ deviceID, onDelete }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -64,19 +64,31 @@ const MoreButton = ({ deviceID }) => {
     setAnchorEl(null);
   };
 
-  async function deleteDevice(id) {
-    console.log(`ID: ${id}`);
+  // async function deleteDevice(id) {
+  //   console.log(`ID: ${id}`);
+  //   try {
+  //     await axios.delete(`${BASE_API_URL}/devices/${id}`);
+  //     console.log("Delete request successful");
+  //     handleClose();
+  //     // Reload the page
+  //     window.location.reload();
+  //   } catch (error) {
+  //     console.error("Error deleting resource:", error);
+  //     throw error;
+  //   }
+  // }
+
+  const handleDeleteClick = async () => {
     try {
-      await axios.delete(`${BASE_API_URL}/devices/${id}`);
+      await axios.delete(`${BASE_API_URL}/devices/${deviceID}`);
       console.log("Delete request successful");
       handleClose();
-      // Reload the page
-      window.location.reload();
+      onDelete(deviceID); // Invoke the onDelete callback with the deviceID
     } catch (error) {
       console.error("Error deleting resource:", error);
       throw error;
     }
-  }
+  };
 
   return (
     <div>
@@ -106,12 +118,7 @@ const MoreButton = ({ deviceID }) => {
           Edit
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
-        <MenuItem
-          onClick={() => {
-            deleteDevice(deviceID);
-          }}
-          disableRipple
-        >
+        <MenuItem onClick={handleDeleteClick} disableRipple>
           <DeleteIcon />
           Delete
         </MenuItem>
