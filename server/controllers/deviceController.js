@@ -63,10 +63,8 @@ const createDevice = async (req, res) => {
   }
 };
 
-const updateDevice = async (req, res) => {
+const updateDevice = async (req, res, io) => {
   const { _id, serialNumber, type, status, locationName } = req.body;
-
-  console.log({ _id, serialNumber, type, status, locationName });
 
   try {
     // Validate the device type and status
@@ -111,6 +109,8 @@ const updateDevice = async (req, res) => {
     // Add the device ID to the new location's devices array
     newLocation.devices.push(device._id);
     await newLocation.save();
+
+    io.emit("deviceUpdated", device);
 
     res.status(200).json({ message: "Device updated", device: device });
   } catch (error) {

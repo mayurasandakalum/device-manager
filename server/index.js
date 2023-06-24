@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+const socketIO = require("socket.io");
 
 const route = require("./routes/route");
 const { PORT } = require("./utils/constants");
@@ -14,8 +15,11 @@ app.use(morgan("tiny"));
 
 // mongodb connection
 const conn = require("./db/connection.js");
-app.use(route);
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+const io = socketIO(server);
+
+app.use(route(io));

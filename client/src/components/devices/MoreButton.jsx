@@ -66,20 +66,6 @@ const MoreButton = ({ deviceID, onDelete }) => {
     setAnchorEl(null);
   };
 
-  // async function deleteDevice(id) {
-  //   console.log(`ID: ${id}`);
-  //   try {
-  //     await axios.delete(`${BASE_API_URL}/devices/${id}`);
-  //     console.log("Delete request successful");
-  //     handleClose();
-  //     // Reload the page
-  //     window.location.reload();
-  //   } catch (error) {
-  //     console.error("Error deleting resource:", error);
-  //     throw error;
-  //   }
-  // }
-
   const handleDeleteClick = async () => {
     // Display the confirmation alert
     handleClose();
@@ -94,13 +80,14 @@ const MoreButton = ({ deviceID, onDelete }) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`${BASE_API_URL}/devices/${deviceID}`);
-          console.log("Delete request successful");
-          // handleClose();
-          onDelete(deviceID); // Invoke the onDelete callback with the deviceID
+          await axios
+            .delete(`${BASE_API_URL}/devices/${deviceID}`)
+            .catch((error) => {
+              Swal.fire("Error!", "Somthing went wrong", "error");
+            });
 
-          // Show success alert
-          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          onDelete(deviceID);
+          Swal.fire("Deleted!", "Your device has been deleted.", "success");
         } catch (error) {
           console.error("Error deleting resource:", error);
           throw error;
