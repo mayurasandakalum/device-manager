@@ -9,6 +9,8 @@ import DeleteIcon from "@mui/icons-material/DeleteRounded";
 import { IconButton } from "@mui/material";
 import axios from "axios";
 
+import Swal from "sweetalert2";
+
 import { BASE_API_URL } from "../../constants/constants";
 
 const StyledMenu = styled((props) => (
@@ -79,15 +81,32 @@ const MoreButton = ({ deviceID, onDelete }) => {
   // }
 
   const handleDeleteClick = async () => {
-    try {
-      await axios.delete(`${BASE_API_URL}/devices/${deviceID}`);
-      console.log("Delete request successful");
-      handleClose();
-      onDelete(deviceID); // Invoke the onDelete callback with the deviceID
-    } catch (error) {
-      console.error("Error deleting resource:", error);
-      throw error;
-    }
+    // Display the confirmation alert
+    handleClose();
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`${BASE_API_URL}/devices/${deviceID}`);
+          console.log("Delete request successful");
+          // handleClose();
+          onDelete(deviceID); // Invoke the onDelete callback with the deviceID
+
+          // Show success alert
+          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        } catch (error) {
+          console.error("Error deleting resource:", error);
+          throw error;
+        }
+      }
+    });
   };
 
   return (

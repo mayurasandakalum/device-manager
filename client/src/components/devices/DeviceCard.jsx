@@ -1,5 +1,5 @@
 import React from "react";
-import { Divider, Grid, Typography } from "@mui/material";
+import { Chip, Divider, Grid, Typography } from "@mui/material";
 import MoreIcon from "@mui/icons-material/MoreHorizRounded";
 
 import PosImage from "../../assets/pos-image.png";
@@ -45,7 +45,7 @@ const DeviceCard = ({ data, onDelete }) => {
   } else if (data.type === "kisok") {
     machineType = "Kiosk";
   } else {
-    machineType = "signage";
+    machineType = "Signage";
   }
 
   return (
@@ -98,9 +98,33 @@ const DeviceCard = ({ data, onDelete }) => {
           alignItems="center"
           justifyContent="center"
         >
-          <Typography sx={{ color: `${textColor}` }}>
-            {data.status === "active" ? "Active" : "Inactive"}
-          </Typography>
+          <Chip
+            label={data.status === "active" ? "Active" : "Inactive"}
+            avatar={
+              <div
+                style={{
+                  width: "8px",
+                  height: "8px",
+                  borderRadius: "50%",
+                  backgroundColor:
+                    data.status === "active"
+                      ? "rgba(0, 178, 93, 1)"
+                      : "rgba(244, 67, 54, 1)",
+                }}
+              ></div>
+            }
+            sx={{
+              px: "5px",
+              bgcolor:
+                data.status === "active"
+                  ? "rgba(0, 178, 93, 0.3)"
+                  : "rgba(244, 67, 54, 0.3)",
+              color:
+                data.status === "active"
+                  ? "rgba(0, 178, 93, 1)"
+                  : "rgba(244, 67, 54, 1)",
+            }}
+          />
         </Grid>
         <Grid container item sm={12}>
           <DataRow title="Serial Number" data={data.serialNumber} />
