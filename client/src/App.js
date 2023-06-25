@@ -1,8 +1,11 @@
 import React from "react";
-import Devices from "./screens/Devices";
-import Test from "./screens/Test";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider, createTheme } from "@mui/material";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+
+import Locations from "./screens/Locations";
+import Devices from "./screens/Devices";
+import Test from "./screens/Test";
 
 const theme = createTheme({
   breakpoints: {
@@ -19,11 +22,14 @@ const theme = createTheme({
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
-      <div>
-        <Toaster />
-        <Devices />
-        {/* <Test /> */}
-      </div>
+      <Toaster />
+      <Router>
+        <Routes>
+          <Route path="/" exact element={<Devices />} />
+          <Route path="/locations" exact element={<Locations />} />
+          {/* <Test /> */}
+        </Routes>
+      </Router>
     </ThemeProvider>
   );
 };

@@ -7,81 +7,84 @@ import axios from "axios";
 import io from "socket.io-client";
 
 import { BASE_API_URL } from "../constants/constants";
-import DeviceCard from "../components/devices/DeviceCard";
+import LocationCard from "../components/locations/LocationCard";
 import SearchBar from "../components/SearchBar";
-import AddDevice from "../components/devices/AddDevice";
+import AddLocation from "../components/locations/AddLocation";
 import { Toast } from "../utils/toast";
 import { Link } from "react-router-dom";
 
-const Devices = () => {
-  const [devices, setDevices] = useState(null);
-  const [updatedDevices, setUpdatedDevices] = useState();
+const Locations = () => {
+  const [locations, setLocations] = useState(null);
+  const [updatedLocations, setUpdatedLocations] = useState();
   const [searchQuery, setsearchQuery] = useState();
-  const [filteredDevices, setFilteredDevices] = useState(null);
+  const [filteredLocations, setFilteredLocations] = useState(null);
 
-  const handleDelete = (deviceId) => {
-    setDevices((prevDevices) =>
-      prevDevices.filter((device) => device._id !== deviceId)
+  const handleDelete = (locationId) => {
+    setLocations((prevLocations) =>
+      prevLocations.filter((location) => location._id !== locationId)
     );
   };
 
   useEffect(() => {
-    const socket = io(BASE_API_URL, { transports: ["websocket"] });
+    // const socket = io(BASE_API_URL, { transports: ["websocket"] });
 
-    socket.on("deviceUpdated", (change) => {
-      if (change.status === "active") {
-        Toast("active", `${change.serialNumber} device is now active.`);
-      } else {
-        Toast("inactive", `${change.serialNumber} device is no longer active.`);
-      }
+    // socket.on("deviceUpdated", (change) => {
+    //   if (change.status === "active") {
+    //     Toast("active", `${change.serialNumber} device is now active.`);
+    //   } else {
+    //     Toast("inactive", `${change.serialNumber} device is no longer active.`);
+    //   }
 
-      setUpdatedDevices(change);
-    });
+    //   setUpdatedLocations(change);
+    // });
 
     axios
-      .get(`${BASE_API_URL}/devices`)
+      .get(`${BASE_API_URL}/locations`)
       .then((res) => {
-        setDevices(res.data);
+        console.log(res.data);
+        setLocations(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
 
-    return () => {
-      socket.disconnect();
-    };
+    // return () => {
+    //   socket.disconnect();
+    // };
   }, []);
 
+  // useEffect(() => {
+  //   if (updatedLocations) {
+  //     console.log("locations");
+  //     setLocations((prevLocations) => {
+  //       const updatedLocationIndex = prevLocations.findIndex(
+  //         (location) => location._id === updatedLocations._id
+  //       );
+
+  //       if (updatedLocationIndex !== -1) {
+  //         const updatedLocationsCopy = [...prevLocations];
+  //         updatedLocationsCopy[updatedLocationIndex] = updatedLocations;
+  //         return updatedLocationsCopy;
+  //       }
+
+  //       return prevLocations;
+  //     });
+  //   }
+  // }, [updatedLocations]);
+
   useEffect(() => {
-    if (updatedDevices) {
-      setDevices((prevDevices) => {
-        const updatedDeviceIndex = prevDevices.findIndex(
-          (device) => device._id === updatedDevices._id
-        );
-
-        if (updatedDeviceIndex !== -1) {
-          const updatedDevicesCopy = [...prevDevices];
-          updatedDevicesCopy[updatedDeviceIndex] = updatedDevices;
-          return updatedDevicesCopy;
-        }
-
-        return prevDevices;
-      });
-    }
-  }, [updatedDevices]);
-
-  useEffect(() => {
-    if (devices) {
+    if (locations) {
       const filtered = searchQuery
-        ? devices.filter(
-            (device) =>
-              device.serialNumber.includes(searchQuery) ||
-              device.type.includes(searchQuery)
+        ? locations.filter(
+            (location) =>
+              location.name.includes(searchQuery) ||
+              location.address.includes(searchQuery) ||
+              location.phone.includes(searchQuery)
           )
-        : devices;
-      setFilteredDevices(filtered);
+        : locations;
+      setFilteredLocations(filtered);
     }
-  }, [devices, searchQuery]);
+  }, [locations, searchQuery]);
 
   return (
     <div style={{ width: "100%" }}>
@@ -104,7 +107,7 @@ const Devices = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  Device List
+                  Location List
                 </Typography>
               </Grid>
               <Grid container item>
@@ -127,7 +130,7 @@ const Devices = () => {
             >
               <SearchBar
                 setSearchQuery={setsearchQuery}
-                placeholder="Search Devices ( using Serial Number, Type )"
+                placeholder="Search Locations ( using Location Name, Address and Phone )"
               />
             </Grid>
             <Grid
@@ -139,7 +142,7 @@ const Devices = () => {
               columnSpacing={2}
             >
               <Grid container item sm={6} justifyContent="end">
-                <Link to={"/locations"} style={{ textDecoration: "none" }}>
+                <Link to={"/"} style={{ textDecoration: "none" }}>
                   <Button
                     variant="outlined"
                     sx={{
@@ -163,12 +166,15 @@ const Devices = () => {
                       },
                     }}
                   >
-                    Locations
+                    Devices
                   </Button>
                 </Link>
               </Grid>
               <Grid container item sm={6}>
-                <AddDevice devices={devices} setDevices={setDevices} />
+                <AddLocation
+                  locations={locations}
+                  setLocations={setLocations}
+                />
               </Grid>
             </Grid>
           </Grid>
@@ -181,13 +187,9 @@ const Devices = () => {
             rowSpacing={3}
             sx={{ mt: "20px" }}
           >
-            {filteredDevices &&
-              filteredDevices.map((device) => (
-                <DeviceCard
-                  key={device._id}
-                  data={device}
-                  onDelete={handleDelete}
-                />
+            {filteredLocations &&
+              filteredLocations.map((location) => (
+                <LocationCard data={location} onDelete={handleDelete} />
               ))}
           </Grid>
         </Grid>
@@ -196,4 +198,4 @@ const Devices = () => {
   );
 };
 
-export default Devices;
+export default Locations;
