@@ -42,19 +42,18 @@ const DeviceCard = ({ data, onDelete }) => {
 
   if (data.type === "pos") {
     machineType = "Pos";
-  } else if (data.type === "kisok") {
+  } else if (data.type === "kiosk") {
     machineType = "Kiosk";
   } else {
     machineType = "Signage";
   }
 
   return (
-    <Grid container item sx={{ width: "300px" }}>
+    <Grid container item sm={3} xl={2}>
       <Grid
         container
         item
         sx={{
-          // backgroundImage: "linear-gradient( #00d2ff 0%, #3a47d5 100%)",
           bgcolor: "white",
           borderRadius: `${borderRadius}`,
           boxShadow: "1px 5px 15px rgba(0, 0, 0, 0.2)",
@@ -76,7 +75,11 @@ const DeviceCard = ({ data, onDelete }) => {
           </Typography>
         </Grid>
         <Grid container item sm={8} justifyContent="end">
-          <MoreButton deviceID={data._id} onDelete={onDelete} />
+          <MoreButton
+            deviceData={data}
+            deviceID={data._id}
+            onDelete={onDelete}
+          />
         </Grid>
         <Grid
           container
@@ -97,6 +100,7 @@ const DeviceCard = ({ data, onDelete }) => {
           sm={12}
           alignItems="center"
           justifyContent="center"
+          sx={{ my: "10px" }}
         >
           <Chip
             label={data.status === "active" ? "Active" : "Inactive"}

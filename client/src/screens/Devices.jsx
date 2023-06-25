@@ -10,11 +10,13 @@ import { BASE_API_URL } from "../constants/constants";
 import DeviceCard from "../components/devices/DeviceCard";
 import SearchBar from "../components/SearchBar";
 import AddDevice from "../components/devices/AddDevice";
+import { Toast } from "../utils/toast";
 
 const Devices = () => {
   const [devices, setDevices] = useState(null);
-
   const [updatedDevices, setUpdatedDevices] = useState();
+  const [searchQuery, setsearchQuery] = useState();
+  const [filteredDevices, setFilteredDevices] = useState(null);
 
   const handleDelete = (deviceId) => {
     setDevices((prevDevices) =>
@@ -26,6 +28,12 @@ const Devices = () => {
     const socket = io(BASE_API_URL, { transports: ["websocket"] });
 
     socket.on("deviceUpdated", (change) => {
+      if (change.status === "active") {
+        Toast("active", `${change.serialNumber} device is now active.`);
+      } else {
+        Toast("inactive", `${change.serialNumber} device is no longer active.`);
+      }
+
       setUpdatedDevices(change);
     });
 
@@ -61,6 +69,19 @@ const Devices = () => {
     }
   }, [updatedDevices]);
 
+  useEffect(() => {
+    if (devices) {
+      const filtered = searchQuery
+        ? devices.filter(
+            (device) =>
+              device.serialNumber.includes(searchQuery) ||
+              device.type.includes(searchQuery)
+          )
+        : devices;
+      setFilteredDevices(filtered);
+    }
+  }, [devices, searchQuery]);
+
   return (
     <div style={{ width: "100%" }}>
       <Grid container sx={{ px: "30px" }}>
@@ -75,7 +96,10 @@ const Devices = () => {
                 <Typography
                   sx={{
                     color: "#293241",
-                    fontSize: "40px",
+                    fontSize: {
+                      sm: "35px",
+                      xl: "40px",
+                    },
                     fontWeight: "bold",
                   }}
                 >
@@ -83,7 +107,12 @@ const Devices = () => {
                 </Typography>
               </Grid>
               <Grid container item>
-                <Typography sx={{ color: "#293241", fontSize: "20px" }}>
+                <Typography
+                  sx={{
+                    color: "#293241",
+                    fontSize: { sm: "18px", xl: "20px" },
+                  }}
+                >
                   Manage all your Devices at one place
                 </Typography>
               </Grid>
@@ -95,7 +124,10 @@ const Devices = () => {
               justifyContent="center"
               alignItems="center"
             >
-              <SearchBar placeholder="Search Devices..." />
+              <SearchBar
+                setSearchQuery={setsearchQuery}
+                placeholder="Search Devices ( using Serial Number, Type )"
+              />
             </Grid>
             <Grid
               container
@@ -109,14 +141,20 @@ const Devices = () => {
                 <Button
                   variant="outlined"
                   sx={{
-                    height: "50px",
+                    height: {
+                      sm: "40px",
+                      xl: "50px",
+                    },
                     textTransform: "none",
                     borderRadius: "30px",
                     borderWidth: "3px",
                     borderColor: "#293241",
                     fontWeight: "bold",
                     color: "#293241",
-                    fontSize: "20px",
+                    fontSize: {
+                      sm: "16px",
+                      xl: "20px",
+                    },
                     "&:hover": {
                       borderWidth: "3px",
                       borderColor: "#293241",
@@ -136,12 +174,12 @@ const Devices = () => {
           <Grid
             container
             item
-            columnSpacing={2}
+            columnSpacing={{ sm: 4, xl: 2 }}
             rowSpacing={3}
             sx={{ mt: "20px" }}
           >
-            {devices &&
-              devices.map((device) => (
+            {filteredDevices &&
+              filteredDevices.map((device) => (
                 <DeviceCard
                   key={device._id}
                   data={device}

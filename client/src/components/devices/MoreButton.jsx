@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -8,8 +8,9 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import DeleteIcon from "@mui/icons-material/DeleteRounded";
 import { IconButton } from "@mui/material";
 import axios from "axios";
-
 import Swal from "sweetalert2";
+
+import UpdateDevice from "./UpdateDevice";
 
 import { BASE_API_URL } from "../../constants/constants";
 
@@ -56,9 +57,17 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-const MoreButton = ({ deviceID, onDelete }) => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+const MoreButton = ({ deviceData, deviceID, onDelete }) => {
+  const [openModel, setOpenModel] = useState(false);
+
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
+  const handleOpenModal = () => {
+    setOpenModel(true);
+    setAnchorEl(null);
+  };
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -67,7 +76,6 @@ const MoreButton = ({ deviceID, onDelete }) => {
   };
 
   const handleDeleteClick = async () => {
-    // Display the confirmation alert
     handleClose();
     Swal.fire({
       title: "Are you sure?",
@@ -98,6 +106,11 @@ const MoreButton = ({ deviceID, onDelete }) => {
 
   return (
     <div>
+      <UpdateDevice
+        deviceData={deviceData}
+        open={openModel}
+        setOpen={setOpenModel}
+      />
       <IconButton
         id="demo-customized-button"
         aria-controls={open ? "demo-customized-menu" : undefined}
@@ -119,7 +132,7 @@ const MoreButton = ({ deviceID, onDelete }) => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={handleOpenModal} disableRipple>
           <EditIcon />
           Edit
         </MenuItem>

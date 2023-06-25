@@ -21,9 +21,15 @@ export default function SearchBar({ setSearchQuery, placeholder }) {
           }
           sx={{
             color: "#293241",
-            fontSize: "20px",
+            fontSize: {
+              sm: "16px",
+              xl: "20px",
+            },
             fontWeight: "bold",
-            height: "50px",
+            height: {
+              sm: "40px",
+              xl: "50px",
+            },
             borderWidth: "3px",
             "& .MuiOutlinedInput-notchedOutline": {
               borderColor: "#293241",
@@ -31,9 +37,9 @@ export default function SearchBar({ setSearchQuery, placeholder }) {
               borderWidth: "3px",
             },
           }}
-          // onChange={(event) => {
-          //   setSearchQuery(event.target.value);
-          // }}
+          onChange={(event) => {
+            setSearchQuery(event.target.value);
+          }}
         />
       </FormControl>
     </Box>
