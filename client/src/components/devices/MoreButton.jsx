@@ -57,7 +57,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-const MoreButton = ({ deviceData, deviceID, onDelete }) => {
+const MoreButton = ({ locations, deviceData, deviceID, onDelete }) => {
   const [openModel, setOpenModel] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -107,6 +107,7 @@ const MoreButton = ({ deviceData, deviceID, onDelete }) => {
   return (
     <div>
       <UpdateDevice
+        locations={locations}
         deviceData={deviceData}
         open={openModel}
         setOpen={setOpenModel}

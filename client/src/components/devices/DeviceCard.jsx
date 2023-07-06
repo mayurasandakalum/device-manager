@@ -37,7 +37,7 @@ const DataRow = ({ title, data }) => {
   );
 };
 
-const DeviceCard = ({ data, onDelete }) => {
+const DeviceCard = ({ locations, data, onDelete }) => {
   let machineType;
 
   if (data.type === "pos") {
@@ -76,6 +76,7 @@ const DeviceCard = ({ data, onDelete }) => {
         </Grid>
         <Grid container item sm={8} justifyContent="end">
           <MoreButton
+            locations={locations}
             deviceData={data}
             deviceID={data._id}
             onDelete={onDelete}
@@ -89,7 +90,7 @@ const DeviceCard = ({ data, onDelete }) => {
           justifyContent="center"
         >
           <img
-            src={PosImage}
+            src={`http://localhost:8082/devices/image/${data.imageName}`}
             alt="pos image"
             style={{ maxWidth: "75%", maxHeight: "75%", objectFit: "fill" }}
           />

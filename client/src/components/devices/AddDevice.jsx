@@ -9,13 +9,16 @@ import DragAndDrop from "../DragAndDrop";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-const AddDevice = ({ devices, setDevices }) => {
+const AddDevice = ({ locations, devices, setDevices }) => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [serialNumber, setSerialNumber] = useState("");
 
+  const [serialNumber, setSerialNumber] = useState("");
   const [type, setType] = useState("");
   const [status, setStatus] = useState("");
+  const [location, setLocation] = useState("");
+
+  const [afterFileName, setAfterFileName] = useState(null);
 
   const handleOpenModal = () => {
     setOpen(true);
@@ -29,6 +32,10 @@ const AddDevice = ({ devices, setDevices }) => {
     setStatus(e.target.value);
   };
 
+  const handleLocationChange = (e) => {
+    setLocation(e.target.value);
+  };
+
   const handleSerialNumber = (e) => {
     setSerialNumber(e.target.value);
   };
@@ -40,7 +47,8 @@ const AddDevice = ({ devices, setDevices }) => {
       serialNumber: serialNumber,
       type: type,
       status: status,
-      locationName: "Location A",
+      imageName: afterFileName,
+      locationName: location,
     };
 
     axios
@@ -55,7 +63,7 @@ const AddDevice = ({ devices, setDevices }) => {
       });
 
     setTimeout(() => {
-      setOpen(false);
+      handleCancel();
       setConfirmLoading(false);
 
       Swal.fire("Added!", "Your device has been added.", "success");
@@ -68,6 +76,7 @@ const AddDevice = ({ devices, setDevices }) => {
     setSerialNumber("");
     setStatus("");
     setType("");
+    setLocation("");
   };
 
   return (
@@ -126,7 +135,7 @@ const AddDevice = ({ devices, setDevices }) => {
             </Grid>
           </Grid>
           <Grid container item columnSpacing={2}>
-            <Grid container item sm={6}>
+            <Grid container item sm={4}>
               <FormControl fullWidth>
                 <InputLabel>Device Type</InputLabel>
                 <Select
@@ -141,7 +150,24 @@ const AddDevice = ({ devices, setDevices }) => {
               </FormControl>
             </Grid>
 
-            <Grid container item sm={6}>
+            <Grid container item sm={4}>
+              <FormControl fullWidth>
+                <InputLabel>Location</InputLabel>
+                <Select
+                  value={location}
+                  label="Location"
+                  onChange={handleLocationChange}
+                >
+                  {locations.map((location) => (
+                    <MenuItem key={location._id} value={location.name}>
+                      {location.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid container item sm={4}>
               <FormControl fullWidth>
                 <InputLabel>Status</InputLabel>
                 <Select
@@ -163,7 +189,10 @@ const AddDevice = ({ devices, setDevices }) => {
             <Grid container item sx={{ width: "100%" }}></Grid>
           </Grid>
         </Grid>
-        <DragAndDrop />
+        <DragAndDrop
+          afterFileName={afterFileName}
+          setAfterFileName={setAfterFileName}
+        />
       </Modal>
     </>
   );

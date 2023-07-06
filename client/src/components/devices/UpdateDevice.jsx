@@ -11,12 +11,13 @@ import Swal from "sweetalert2";
 import { useEffect } from "react";
 import { BASE_API_URL } from "../../constants/constants";
 
-const UpdateDevice = ({ deviceData, open, setOpen }) => {
+const UpdateDevice = ({ locations, deviceData, open, setOpen }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [serialNumber, setSerialNumber] = useState("");
   const [type, setType] = useState("");
   const [status, setStatus] = useState("");
   const [id, setId] = useState("");
+  const [location, setLocation] = useState("");
 
   const handleTypeChange = (e) => {
     setType(e.target.value);
@@ -24,6 +25,10 @@ const UpdateDevice = ({ deviceData, open, setOpen }) => {
 
   const handleSatusChange = (e) => {
     setStatus(e.target.value);
+  };
+
+  const handleLocationChange = (e) => {
+    setLocation(e.target.value);
   };
 
   const handleSerialNumber = (e) => {
@@ -38,7 +43,8 @@ const UpdateDevice = ({ deviceData, open, setOpen }) => {
       serialNumber: serialNumber,
       type: type,
       status: status,
-      locationName: "Location A",
+      imageName: deviceData.imageName,
+      locationName: location,
     };
 
     axios
@@ -60,11 +66,6 @@ const UpdateDevice = ({ deviceData, open, setOpen }) => {
 
   const handleCancel = () => {
     setOpen(false);
-    console.log(deviceData);
-
-    setSerialNumber("");
-    setStatus("");
-    setType("");
   };
 
   useEffect(() => {
@@ -72,6 +73,7 @@ const UpdateDevice = ({ deviceData, open, setOpen }) => {
     setSerialNumber(deviceData.serialNumber);
     setStatus(deviceData.status);
     setType(deviceData.type);
+    setLocation(deviceData.locationName);
   }, []);
 
   return (
@@ -103,7 +105,7 @@ const UpdateDevice = ({ deviceData, open, setOpen }) => {
             </Grid>
           </Grid>
           <Grid container item columnSpacing={2}>
-            <Grid container item sm={6}>
+            <Grid container item sm={4}>
               <FormControl fullWidth>
                 <InputLabel>Device Type</InputLabel>
                 <Select
@@ -118,7 +120,24 @@ const UpdateDevice = ({ deviceData, open, setOpen }) => {
               </FormControl>
             </Grid>
 
-            <Grid container item sm={6}>
+            <Grid container item sm={4}>
+              <FormControl fullWidth>
+                <InputLabel>Location</InputLabel>
+                <Select
+                  value={location}
+                  label="Location"
+                  onChange={handleLocationChange}
+                >
+                  {locations.map((location) => (
+                    <MenuItem key={location._id} value={location.name}>
+                      {location.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid container item sm={4}>
               <FormControl fullWidth>
                 <InputLabel>Status</InputLabel>
                 <Select
@@ -135,10 +154,25 @@ const UpdateDevice = ({ deviceData, open, setOpen }) => {
 
           <Grid container item rowSpacing={1}>
             <Grid container item sx={{ width: "100%" }}>
-              <Typography>Upload a image</Typography>
+              <Typography>Uploaded image</Typography>
             </Grid>
-            <Grid container item sx={{ width: "100%" }}>
-              <DragAndDrop />
+            <Grid
+              container
+              item
+              sx={{ width: "100%" }}
+              justifyContent="center"
+              alignItems="center"
+            >
+              <img
+                src={`http://localhost:8082/devices/image/${deviceData.imageName}`}
+                alt="pos image"
+                style={{
+                  height: "100%",
+                  maxWidth: "50%",
+                  maxHeight: "100%",
+                  objectFit: "fill",
+                }}
+              />
             </Grid>
           </Grid>
         </Grid>

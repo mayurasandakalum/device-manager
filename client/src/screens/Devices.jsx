@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 
 const Devices = () => {
   const [devices, setDevices] = useState(null);
+  const [locations, setLocations] = useState([]);
   const [updatedDevices, setUpdatedDevices] = useState();
   const [searchQuery, setsearchQuery] = useState();
   const [filteredDevices, setFilteredDevices] = useState(null);
@@ -38,10 +39,21 @@ const Devices = () => {
       setUpdatedDevices(change);
     });
 
+    // Retrieve devices
     axios
       .get(`${BASE_API_URL}/devices`)
       .then((res) => {
         setDevices(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // Retrieve locations
+    axios
+      .get(`${BASE_API_URL}/locations`)
+      .then((res) => {
+        setLocations(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -168,7 +180,11 @@ const Devices = () => {
                 </Link>
               </Grid>
               <Grid container item sm={6}>
-                <AddDevice devices={devices} setDevices={setDevices} />
+                <AddDevice
+                  locations={locations}
+                  devices={devices}
+                  setDevices={setDevices}
+                />
               </Grid>
             </Grid>
           </Grid>
@@ -185,6 +201,7 @@ const Devices = () => {
               filteredDevices.map((device) => (
                 <DeviceCard
                   key={device._id}
+                  locations={locations}
                   data={device}
                   onDelete={handleDelete}
                 />

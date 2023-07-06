@@ -1,33 +1,17 @@
 import { InboxOutlined } from "@ant-design/icons";
 import { Button, Typography } from "@mui/material";
 import { message, Upload } from "antd";
-// const { Dragger } = Upload;
-// const props = {
-//   name: "file",
-//   action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-//   onChange(info) {
-//     const { status } = info.file;
-//     if (status !== "uploading") {
-//       console.log(info.file, info.fileList);
-//     }
-//     if (status === "done") {
-//       message.success(`${info.file.name} file uploaded successfully.`);
-//     } else if (status === "error") {
-//       message.error(`${info.file.name} file upload failed.`);
-//     }
-//   },
-//   onDrop(e) {
-//     console.log("Dropped files", e.dataTransfer.files);
-//   },
-// };
-const DragAndDrop = () => {
+import axios from "axios";
+
+const DragAndDrop = ({ afterFileName, setAfterFileName }) => {
   const handleOnChange = (info) => {
     const { status } = info.file;
     if (status !== "uploading") {
       console.log(info.file, info.fileList);
     }
     if (status === "done") {
-      message.success(`${info.file.name} file uploaded successfully.`);
+      // message.success(`${info.file.name} file uploaded successfully.`);
+      setAfterFileName(info.file.response.filename);
     } else if (status === "error") {
       message.error(`${info.file.name} file upload failed.`);
     }
@@ -37,15 +21,24 @@ const DragAndDrop = () => {
     console.log("Dropped files", event.dataTransfer.files);
   };
 
-  const handleOnRemove = (event) => {
-    console.log(event);
+  const handleOnRemove = async (file) => {
+    try {
+      await axios.delete(
+        `http://localhost:8082/devices/image/${afterFileName}`
+      );
+      setAfterFileName(null);
+      message.success(`${file.name} file removed successfully.`);
+    } catch (error) {
+      console.error(error);
+      message.error(`${file.name} file removal failed.`);
+    }
   };
 
   return (
     <div style={{ width: "100%" }}>
       <Upload.Dragger
         name="file"
-        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+        action="http://localhost:8082/devices/image"
         style={{ width: "100%" }}
         onChange={handleOnChange}
         onDrop={handleOnDrop}

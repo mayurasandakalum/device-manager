@@ -28,7 +28,7 @@ const getDeviceById = async (req, res) => {
 
 const createDevice = async (req, res) => {
   try {
-    const { serialNumber, type, status, locationName } = req.body;
+    const { serialNumber, type, status, imageName, locationName } = req.body;
 
     // validate the device type and status
     if (
@@ -45,6 +45,7 @@ const createDevice = async (req, res) => {
           serialNumber,
           type,
           status,
+          imageName,
           locationName,
         });
 
@@ -64,7 +65,7 @@ const createDevice = async (req, res) => {
 };
 
 const updateDevice = async (req, res, io) => {
-  const { _id, serialNumber, type, status, locationName } = req.body;
+  const { _id, serialNumber, type, status, imageName, locationName } = req.body;
 
   try {
     // Validate the device type and status
@@ -103,6 +104,7 @@ const updateDevice = async (req, res, io) => {
     device.serialNumber = serialNumber;
     device.type = type;
     device.status = status;
+    device.imageName = imageName;
     device.locationName = locationName;
     await device.save();
 
