@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Divider, Grid, IconButton, Typography } from "@mui/material";
 import RightArrow from "@mui/icons-material/ArrowForwardIosRounded";
 
-import PosImage from "../../assets/pos-image.png";
+import LocationImage from "../../assets/location-pin.png";
 import MoreButton from "./MoreButton";
 import { useEffect } from "react";
 import DeviceInfo from "./DeviceInfo";
@@ -48,13 +48,12 @@ const DataRow = ({ title, data, handleOpen }) => {
 };
 
 const LocationCard = ({ data, onDelete }) => {
-  const [locationDevices, setLocationDevices] = useState();
+  const [locationDevices, setLocationDevices] = useState([]);
 
   useEffect(() => {
     axios
       .get(`${BASE_API_URL}/locations/devices/${data._id}`)
       .then((res) => {
-        // console.log(res.data);
         setLocationDevices(res.data);
       })
       .catch((err) => {
@@ -114,7 +113,7 @@ const LocationCard = ({ data, onDelete }) => {
           justifyContent="center"
         >
           <img
-            src={PosImage}
+            src={LocationImage}
             alt="pos image"
             style={{ maxWidth: "75%", maxHeight: "75%", objectFit: "fill" }}
           />

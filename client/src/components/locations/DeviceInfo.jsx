@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { Modal } from "antd";
-import DragAndDrop from "../DragAndDrop";
-import axios from "axios";
-import Swal from "sweetalert2";
-import { useEffect } from "react";
+
+import DeviceTable from "./DeviceTable";
 
 const DeviceInfo = ({ devices, open, setOpen }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -14,17 +12,11 @@ const DeviceInfo = ({ devices, open, setOpen }) => {
 
     setOpen(false);
     setConfirmLoading(false);
-    // setTimeout(() => {
-    // }, 2000);
   };
 
   const handleCancel = () => {
     setOpen(false);
   };
-
-  // useEffect(() => {
-  //   console.log(devices);
-  // }, [devices]);
 
   return (
     <>
@@ -39,39 +31,8 @@ const DeviceInfo = ({ devices, open, setOpen }) => {
             Associated Devices
           </Typography>
         </Grid>
-        <Grid container rowSpacing={2}>
-          <Grid container item rowSpacing={1}>
-            <Grid
-              container
-              item
-              rowSpacing={1}
-              sm={6}
-              sx={{ fontWeight: "bold" }}
-            >
-              Device Serial Number
-            </Grid>
-            <Grid
-              container
-              item
-              rowSpacing={1}
-              sm={6}
-              sx={{ fontWeight: "bold" }}
-            >
-              Status
-            </Grid>
-          </Grid>
-          {devices &&
-            devices.devices.map((device) => (
-              <Grid container item rowSpacing={1}>
-                <Grid container item rowSpacing={1} sm={6}>
-                  {device.serialNumber}
-                </Grid>
-                <Grid container item rowSpacing={1} sm={6}>
-                  {device.status}
-                </Grid>
-              </Grid>
-            ))}
-        </Grid>
+
+        <DeviceTable devices={devices} />
       </Modal>
     </>
   );

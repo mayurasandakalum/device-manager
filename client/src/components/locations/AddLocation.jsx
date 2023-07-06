@@ -106,7 +106,7 @@ const AddLocation = ({ locations, setLocations }) => {
           </Typography>
         </Grid>
         <Grid container rowSpacing={2}>
-          <Grid container item rowSpacing={1}>
+          <Grid container item rowSpacing={2}>
             <Grid container item sx={{ width: "100%" }}>
               <Typography>Location information</Typography>
             </Grid>
@@ -136,15 +136,6 @@ const AddLocation = ({ locations, setLocations }) => {
                 onChange={handlePhone}
                 sx={{ width: "100%" }}
               />
-            </Grid>
-          </Grid>
-
-          <Grid container item rowSpacing={1}>
-            <Grid container item sx={{ width: "100%" }}>
-              <Typography>Upload a image</Typography>
-            </Grid>
-            <Grid container item sx={{ width: "100%" }}>
-              <DragAndDrop />
             </Grid>
           </Grid>
         </Grid>

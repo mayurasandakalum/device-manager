@@ -1,142 +1,55 @@
-import { useState } from "react";
-import { Button, Grid, TextField, Typography } from "@mui/material";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { Modal } from "antd";
-import DragAndDrop from "../components/DragAndDrop";
+import React from "react";
 
-const App = () => {
-  const [open, setOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [serialNumber, setSerialNumber] = useState("");
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
-  const [type, setType] = useState("");
-  const [status, setStatus] = useState("");
+function createData(imageName, serialNumber, type, status) {
+  return { imageName, serialNumber, type, status };
+}
 
-  const handleOpenModal = () => {
-    setOpen(true);
-  };
+const rows = [
+  createData("file-1688675972922-236354847.png", "6.0", "24", "4.0"),
+];
 
-  const handleTypeChange = (e) => {
-    setType(e.target.value);
-  };
-
-  const handleSatusChange = (e) => {
-    setStatus(e.target.value);
-  };
-
-  const handleSerialNumber = (e) => {
-    console.log(e.target.value);
-    setSerialNumber(e.target.value);
-  };
-
-  const handleOk = () => {
-    setConfirmLoading(true);
-
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
-  };
-
-  const handleCancel = () => {
-    setOpen(false);
-  };
-
+const DeviceTable = () => {
   return (
-    <>
-      <Button
-        variant="outlined"
-        onClick={handleOpenModal}
-        disableElevation
-        sx={{
-          height: "50px",
-          textTransform: "none",
-          borderRadius: "30px",
-          borderWidth: "3px",
-          borderColor: "#293241",
-          fontWeight: "bold",
-          color: "#293241",
-          fontSize: "20px",
-          "&:hover": {
-            borderWidth: "3px",
-            borderColor: "#293241",
-          },
-        }}
-      >
-        + Add a Device
-      </Button>
-      <Modal
-        visible={open}
-        onOk={handleOk}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancel}
-      >
-        <Grid container justifyContent="center" sx={{ mb: "15px" }}>
-          <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
-            Add a device
-          </Typography>
-        </Grid>
-        <Grid container rowSpacing={2}>
-          <Grid container item rowSpacing={1}>
-            <Grid container item sx={{ width: "100%" }}>
-              <Typography>Device information</Typography>
-            </Grid>
-            <Grid container item sx={{ width: "100%" }}>
-              <TextField
-                label="Serial Number"
-                variant="outlined"
-                value={serialNumber}
-                onChange={handleSerialNumber}
-                sx={{ width: "100%" }}
-              />
-            </Grid>
-          </Grid>
-          <Grid container item columnSpacing={2}>
-            <Grid container item sm={6}>
-              <FormControl fullWidth>
-                <InputLabel>Device Type</InputLabel>
-                <Select
-                  value={type}
-                  label="Device Type"
-                  onChange={handleTypeChange}
-                >
-                  <MenuItem value={"pos"}>Pos</MenuItem>
-                  <MenuItem value={"kiosk"}>Kiosk</MenuItem>
-                  <MenuItem value={"signage"}>Signage</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            <Grid container item sm={6}>
-              <FormControl fullWidth>
-                <InputLabel>Status</InputLabel>
-                <Select
-                  value={status}
-                  label="Status"
-                  onChange={handleSatusChange}
-                >
-                  <MenuItem value={"active"}>Active</MenuItem>
-                  <MenuItem value={"inactive"}>Inactive</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
-
-          <Grid container item rowSpacing={1}>
-            <Grid container item sx={{ width: "100%" }}>
-              <Typography>Upload a image</Typography>
-            </Grid>
-            <Grid container item sx={{ width: "100%" }}>
-              <DragAndDrop />
-            </Grid>
-          </Grid>
-        </Grid>
-      </Modal>
-    </>
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell></TableCell>
+            <TableCell>Serial Number</TableCell>
+            <TableCell>Type</TableCell>
+            <TableCell>Status</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow
+              key={row.name}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell align="center">
+                <img
+                  src={`http://localhost:8082/devices/image/${row.imageName}`}
+                  alt={row.imageName}
+                  style={{ height: "50px" }}
+                />
+              </TableCell>
+              <TableCell>{row.serialNumber}</TableCell>
+              <TableCell>{row.type}</TableCell>
+              <TableCell>{row.status}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 
-export default App;
+export default DeviceTable;

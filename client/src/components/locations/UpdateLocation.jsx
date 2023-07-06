@@ -59,11 +59,6 @@ const UpdateLocation = ({ locationData, open, setOpen }) => {
 
   const handleCancel = () => {
     setOpen(false);
-    console.log(locationData);
-
-    setName("");
-    setPhone("");
-    setAddress("");
   };
 
   useEffect(() => {
@@ -76,7 +71,7 @@ const UpdateLocation = ({ locationData, open, setOpen }) => {
   return (
     <>
       <Modal
-        visible={open}
+        open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
@@ -87,7 +82,7 @@ const UpdateLocation = ({ locationData, open, setOpen }) => {
           </Typography>
         </Grid>
         <Grid container rowSpacing={2}>
-          <Grid container item rowSpacing={1}>
+          <Grid container item rowSpacing={3}>
             <Grid container item sx={{ width: "100%" }}>
               <Typography>Location information</Typography>
             </Grid>
@@ -117,45 +112,6 @@ const UpdateLocation = ({ locationData, open, setOpen }) => {
                 onChange={handlePhone}
                 sx={{ width: "100%" }}
               />
-            </Grid>
-          </Grid>
-          {/* <Grid container item columnSpacing={2}>
-            <Grid container item sm={6}>
-              <FormControl fullWidth>
-                <InputLabel>Device Type</InputLabel>
-                <Select
-                  value={type}
-                  label="Device Type"
-                  onChange={handleTypeChange}
-                >
-                  <MenuItem value={"pos"}>Pos</MenuItem>
-                  <MenuItem value={"kiosk"}>Kiosk</MenuItem>
-                  <MenuItem value={"signage"}>Signage</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            <Grid container item sm={6}>
-              <FormControl fullWidth>
-                <InputLabel>Status</InputLabel>
-                <Select
-                  value={status}
-                  label="Status"
-                  onChange={handleSatusChange}
-                >
-                  <MenuItem value={"active"}>Active</MenuItem>
-                  <MenuItem value={"inactive"}>Inactive</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid> */}
-
-          <Grid container item rowSpacing={1}>
-            <Grid container item sx={{ width: "100%" }}>
-              <Typography>Upload a image</Typography>
-            </Grid>
-            <Grid container item sx={{ width: "100%" }}>
-              <DragAndDrop />
             </Grid>
           </Grid>
         </Grid>

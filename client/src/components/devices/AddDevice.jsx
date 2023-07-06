@@ -109,7 +109,7 @@ const AddDevice = ({ locations, devices, setDevices }) => {
         + Add Device
       </Button>
       <Modal
-        visible={open}
+        open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}

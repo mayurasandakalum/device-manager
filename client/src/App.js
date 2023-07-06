@@ -27,7 +27,7 @@ const App = () => {
         <Routes>
           <Route path="/" exact element={<Devices />} />
           <Route path="/locations" exact element={<Locations />} />
-          {/* <Test /> */}
+          <Route path="/test" exact element={<Test />} />
         </Routes>
       </Router>
     </ThemeProvider>

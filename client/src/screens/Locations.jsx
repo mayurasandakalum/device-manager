@@ -2,20 +2,16 @@ import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import { Button, Typography } from "@mui/material";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
-
-import io from "socket.io-client";
 
 import { BASE_API_URL } from "../constants/constants";
 import LocationCard from "../components/locations/LocationCard";
 import SearchBar from "../components/SearchBar";
 import AddLocation from "../components/locations/AddLocation";
-import { Toast } from "../utils/toast";
-import { Link } from "react-router-dom";
 
 const Locations = () => {
   const [locations, setLocations] = useState(null);
-  const [updatedLocations, setUpdatedLocations] = useState();
   const [searchQuery, setsearchQuery] = useState();
   const [filteredLocations, setFilteredLocations] = useState(null);
 
@@ -26,51 +22,15 @@ const Locations = () => {
   };
 
   useEffect(() => {
-    // const socket = io(BASE_API_URL, { transports: ["websocket"] });
-
-    // socket.on("deviceUpdated", (change) => {
-    //   if (change.status === "active") {
-    //     Toast("active", `${change.serialNumber} device is now active.`);
-    //   } else {
-    //     Toast("inactive", `${change.serialNumber} device is no longer active.`);
-    //   }
-
-    //   setUpdatedLocations(change);
-    // });
-
     axios
       .get(`${BASE_API_URL}/locations`)
       .then((res) => {
-        console.log(res.data);
         setLocations(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-
-    // return () => {
-    //   socket.disconnect();
-    // };
   }, []);
-
-  // useEffect(() => {
-  //   if (updatedLocations) {
-  //     console.log("locations");
-  //     setLocations((prevLocations) => {
-  //       const updatedLocationIndex = prevLocations.findIndex(
-  //         (location) => location._id === updatedLocations._id
-  //       );
-
-  //       if (updatedLocationIndex !== -1) {
-  //         const updatedLocationsCopy = [...prevLocations];
-  //         updatedLocationsCopy[updatedLocationIndex] = updatedLocations;
-  //         return updatedLocationsCopy;
-  //       }
-
-  //       return prevLocations;
-  //     });
-  //   }
-  // }, [updatedLocations]);
 
   useEffect(() => {
     if (locations) {
