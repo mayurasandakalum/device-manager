@@ -160,11 +160,10 @@ const AddDevice = ({ devices, setDevices }) => {
             <Grid container item sx={{ width: "100%" }}>
               <Typography>Upload a image</Typography>
             </Grid>
-            <Grid container item sx={{ width: "100%" }}>
-              <DragAndDrop />
-            </Grid>
+            <Grid container item sx={{ width: "100%" }}></Grid>
           </Grid>
         </Grid>
+        <DragAndDrop />
       </Modal>
     </>
   );
