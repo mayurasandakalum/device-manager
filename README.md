@@ -27,7 +27,7 @@
 3. Also, by clicking the button on the right side of the device, it is possible to change the details of the added devices and to delete them.
 4. And we can use the searchbar to search and get the devices we need.
 
-### Locarions Page
+### Locations Page
 
 1. After clicking the locations button on the device page, you will be taken to the locations management page.
 2. As before, we can add locations, update and delete existing locations.
