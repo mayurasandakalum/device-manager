@@ -13,6 +13,8 @@ const AddDevice = ({ locations, devices, setDevices }) => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
+  const [isSuccess, setIsSuccess] = useState(false);
+
   const [serialNumber, setSerialNumber] = useState("");
   const [type, setType] = useState("");
   const [status, setStatus] = useState("");
@@ -54,19 +56,23 @@ const AddDevice = ({ locations, devices, setDevices }) => {
     axios
       .post("http://localhost:8082/devices", device)
       .then((response) => {
-        console.log(response.data.device);
         setDevices([...devices, response.data.device]);
+        setIsSuccess(true);
+        Swal.fire("Added!", "Your device has been added.", "success");
       })
       .catch((error) => {
         console.log(error);
-        Swal.fire("Error!", "Somthing went wrong", "error");
+        setIsSuccess(false);
+        if (error.response.data.error.includes("E11000")) {
+          Swal.fire("Error!", "This serial number already exists", "error");
+        } else {
+          Swal.fire("Error!", "Somthing went wrong", "error");
+        }
       });
 
     setTimeout(() => {
       handleCancel();
       setConfirmLoading(false);
-
-      Swal.fire("Added!", "Your device has been added.", "success");
     }, 2000);
   };
 

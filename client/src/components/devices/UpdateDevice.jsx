@@ -51,16 +51,19 @@ const UpdateDevice = ({ locations, deviceData, open, setOpen }) => {
       .put(`${BASE_API_URL}/devices`, device)
       .then((response) => {
         console.log(response);
+        Swal.fire("Updated!", "Your device has been updated.", "success");
       })
       .catch((error) => {
-        console.log(error);
+        if (error.response.data.error.includes("E11000")) {
+          Swal.fire("Error!", "This serial number already exists", "error");
+        } else {
+          Swal.fire("Error!", "Somthing went wrong", "error");
+        }
       });
 
     setTimeout(() => {
       setOpen(false);
       setConfirmLoading(false);
-
-      Swal.fire("Updated!", "Your device has been updated.", "success");
     }, 2000);
   };
 
@@ -86,7 +89,7 @@ const UpdateDevice = ({ locations, deviceData, open, setOpen }) => {
       >
         <Grid container justifyContent="center" sx={{ mb: "15px" }}>
           <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
-            Add a device
+            Update device
           </Typography>
         </Grid>
         <Grid container rowSpacing={2}>
