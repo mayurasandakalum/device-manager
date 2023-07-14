@@ -21,7 +21,7 @@ const DeviceInfo = ({ devices, open, setOpen }) => {
   return (
     <>
       <Modal
-        visible={open}
+        open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}

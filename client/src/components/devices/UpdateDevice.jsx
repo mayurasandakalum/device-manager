@@ -5,7 +5,6 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Modal } from "antd";
-import DragAndDrop from "../DragAndDrop";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useEffect } from "react";
@@ -82,7 +81,7 @@ const UpdateDevice = ({ locations, deviceData, open, setOpen }) => {
   return (
     <>
       <Modal
-        visible={open}
+        open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}

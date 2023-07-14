@@ -95,7 +95,7 @@ const AddLocation = ({ locations, setLocations }) => {
         + Add Location
       </Button>
       <Modal
-        visible={open}
+        open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}

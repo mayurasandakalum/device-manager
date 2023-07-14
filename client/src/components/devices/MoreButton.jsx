@@ -118,7 +118,6 @@ const MoreButton = ({ locations, deviceData, deviceID, onDelete }) => {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         variant="contained"
-        disableElevation
         onClick={handleClick}
         sx={{ mr: "10px" }}
       >

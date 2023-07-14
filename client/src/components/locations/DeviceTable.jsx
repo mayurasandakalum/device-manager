@@ -27,16 +27,16 @@ const DeviceTable = ({ devices }) => {
                 key={row.name}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell align="center">
+                <TableCell align="center" key={row.imageName}>
                   <img
                     src={`http://localhost:8082/devices/image/${row.imageName}`}
                     alt={row.imageName}
                     style={{ height: "50px" }}
                   />
                 </TableCell>
-                <TableCell>{row.serialNumber}</TableCell>
-                <TableCell>{row.type}</TableCell>
-                <TableCell>{row.status}</TableCell>
+                <TableCell key={row.serialNumber}>{row.serialNumber}</TableCell>
+                <TableCell key={row.type}>{row.type}</TableCell>
+                <TableCell key={row.status}>{row.status}</TableCell>
               </TableRow>
             ))}
         </TableBody>

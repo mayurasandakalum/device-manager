@@ -148,8 +148,12 @@ const Locations = () => {
             sx={{ mt: "20px" }}
           >
             {filteredLocations &&
-              filteredLocations.map((location) => (
-                <LocationCard data={location} onDelete={handleDelete} />
+              filteredLocations.map((location, index) => (
+                <LocationCard
+                  key={index}
+                  data={location}
+                  onDelete={handleDelete}
+                />
               ))}
           </Grid>
         </Grid>

@@ -90,7 +90,6 @@ const AddDevice = ({ locations, devices, setDevices }) => {
       <Button
         variant="outlined"
         onClick={handleOpenModal}
-        disableElevation
         sx={{
           height: {
             sm: "40px",
